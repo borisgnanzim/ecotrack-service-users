@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const ConnexionDb = require('./src/config/mongo');
+const userRoutes = require('./src/routes/userRoutes');
 
 const app = express();
 
@@ -34,3 +35,4 @@ async function startServer() {
   }
 }
 startServer();
+
