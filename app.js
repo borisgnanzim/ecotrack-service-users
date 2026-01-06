@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const userRoutes = require('./src/routes/userRoutes');
-
+const { swaggerUi, swaggerSpec } = require("./swagger");
+const authMiddleware = require('./src/middleware/authMiddleware');
+const authRoutes = require('./src/routes/authRoutes');
 const app = express();
 
 app.use(cors());
@@ -16,7 +18,9 @@ app.get('/test', (req, res) => {
   res.send('Test route is working');
 });
 
+
+app.use('/auth', authRoutes);
 // Mount user routes
 app.use('/users', userRoutes);
-
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 module.exports = app;

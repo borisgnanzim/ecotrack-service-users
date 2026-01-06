@@ -1,6 +1,6 @@
 const User = require('../models/User');
 
-// get uses
+// get users
 
 exports.getAllUsers = async (req, res, next) => {
     try {
@@ -53,3 +53,7 @@ exports.deleteUser = async (req, res, next) => {
         res.status(500).json({message: error.message});
     }
 };
+
+exports.getProfile = async (req, res, next) => {
+
+}
