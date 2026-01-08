@@ -8,6 +8,20 @@ const authController = require('../controllers/auth/authController');
  *     summary: Authentifie un utilisateur et génère un token JWT
  *     tags:
  *       - Authentification
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Utilisateur authentifié avec succès

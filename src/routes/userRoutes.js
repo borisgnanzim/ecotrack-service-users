@@ -11,12 +11,14 @@ router.use(authMiddleware);
  *     summary: Récupère la liste des utilisateurs
  *     tags:
  *       - Utilisateurs
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: Liste des utilisateurs
  */
+
 router.get('/', userController.getAllUsers);
-// get user by id
 
 /**
  * @openapi
@@ -25,6 +27,8 @@ router.get('/', userController.getAllUsers);
  *    summary: Récupère un utilisateur par son ID
  *    tags:
  *      - Utilisateurs
+ *    security:
+ *      - bearerAuth: []
  *    parameters:
  *      - in: path
  *        name: id
@@ -35,8 +39,9 @@ router.get('/', userController.getAllUsers);
  *      200:
  *        description: Utilisateur trouvé
  */
+
 router.get('/:id', userController.getUserById);
-// update user
+
 /**
  * @openapi
  * /users/{id}:
@@ -44,12 +49,15 @@ router.get('/:id', userController.getUserById);
  *      summary: Met à jour un utilisateur par son ID
  *      tags:
  *        - Utilisateurs
+ *      security:
+ *        - bearerAuth: []
  *      responses:
  *        200:
  *          description: Utilisateur mis à jour  
  */
 
 router.put('/:id',  userController.updateUser);
+
 /**
  * 
  * @openapi
@@ -58,6 +66,8 @@ router.put('/:id',  userController.updateUser);
  *      summary: Supprime un utilisateur par son ID
  *      tags:
  *        - Utilisateurs
+ *      security:
+ *        - bearerAuth: []
  *      responses:
  *        200:
  *          description: Utilisateur supprimé

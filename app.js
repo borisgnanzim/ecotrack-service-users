@@ -4,7 +4,10 @@ const userRoutes = require('./src/routes/userRoutes');
 const { swaggerUi, swaggerSpec } = require("./swagger");
 const authMiddleware = require('./src/middleware/authMiddleware');
 const authRoutes = require('./src/routes/authRoutes');
+const profileRoutes = require('./src/routes/profileRoutes');  
+
 const app = express();
+
 
 app.use(cors());
 app.use(express.json());
@@ -20,7 +23,7 @@ app.get('/test', (req, res) => {
 
 
 app.use('/auth', authRoutes);
-// Mount user routes
 app.use('/users', userRoutes);
+app.use('/users/profile', profileRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 module.exports = app;
