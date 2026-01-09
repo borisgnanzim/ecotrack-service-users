@@ -12,7 +12,7 @@ exports.getProfile = async (req, res, next) => {
         res.status(200).json({user : decoder , message : "User Profile return succefully"})
 
     } catch(err) {
-        res.status(401).json({ message: 'Invalid token' });
+        res.status(401).json({ message: 'Invalid token', error: err.message });
     }
 
 }

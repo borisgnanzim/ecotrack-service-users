@@ -23,7 +23,7 @@ app.get('/test', (req, res) => {
 
 
 app.use('/auth', authRoutes);
-app.use('/users', userRoutes);
 app.use('/users/profile', profileRoutes);
+app.use('/users', userRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 module.exports = app;
