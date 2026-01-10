@@ -9,7 +9,18 @@ exports.getProfile = async (req, res, next) => {
     const token = authHeader.split(" ")[1]; // "Bearer xxx"
     try {
         const decoder = jwt.verify(token, process.env.JWT_SECRET);
-        res.status(200).json({user : decoder , message : "User Profile return succefully"})
+        const user = await User.findById(decoder.id);
+        if(!user) {
+            return res.status(404).json({message: 'Utilisateur non trouvé'});
+        }
+        const profileData = {
+            name: user.name,
+            address: user.address,
+            username: user.username,
+            email: user.email,
+            role: user.role
+        };
+        res.status(200).json({user : profileData , message : "User Profile return succefully"})
 
     } catch(err) {
         res.status(401).json({ message: 'Invalid token', error: err.message });
