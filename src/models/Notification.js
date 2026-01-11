@@ -1,14 +1,25 @@
-const mongoose = require('mongoose');
+const { prisma } = require('../config/postgres');
 
-const notificationSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
-  roleTarget: { type: String, enum: ['citizen', 'agent', 'manager', 'admin'], required: false },
-  title: { type: String, required: true },
-  message: { type: String, required: true },
-  type: { type: String, enum: ['info', 'success', 'warning', 'error'], default: 'info' },
-  isRead: { type: Boolean, default: false },
-  createdAt: { type: Date, default: Date.now }
-});
-
-const Notification = mongoose.models.Notification || mongoose.model('Notification', notificationSchema);
-module.exports = Notification;
+module.exports = {
+  create: async (data) => {
+    return prisma.notification.create({ data });
+  },
+  find: async () => {
+    return prisma.notification.findMany();
+  },
+  findById: async (id) => {
+    return prisma.notification.findUnique({ where: { id } });
+  },
+  findByUserId: async (userId) => {
+    return prisma.notification.findMany({ where: { userId } });
+  },
+  findByIdAndUpdate: async (id, update) => {
+    return prisma.notification.update({ where: { id }, data: update });
+  },
+  findByIdAndDelete: async (id) => {
+    return prisma.notification.delete({ where: { id } });
+  },
+  deleteMany: async (where = {}) => {
+    return prisma.notification.deleteMany({ where });
+  }
+};

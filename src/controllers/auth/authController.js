@@ -15,9 +15,9 @@ exports.login = async (req, res, next) => {
             return res.status(401).json({ message: 'Mot de passe incorrect' });
         }
         // Générer un token JWT (à implémenter)
-        const token = jwt.sign({ id: user._id, role: user.role }, secret_key, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id, role: user.role }, secret_key, { expiresIn: '1h' });
 
-        res.status(200).json({ token, message: 'Logged in successfully', user_role: user.role, user_id: user._id, username: user.username });
+        res.status(200).json({ token, message: 'Logged in successfully', user_role: user.role, user_id: user.id, username: user.username });
 
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -29,7 +29,7 @@ exports.registerCitizen = async (req, res, next) => {
     try {
         const { username, email, password } = req.body;
         const user = await User.create({ username, email, password });
-        const token = jwt.sign({ id: user._id, role: user.role }, secret_key, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id, role: user.role }, secret_key, { expiresIn: '1h' });
         res.status(201).json({ message: 'Citizen registered successfully', user, token });
     } catch (error) {
         res.status(500).json({ message: error.message });

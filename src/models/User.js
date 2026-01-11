@@ -1,30 +1,49 @@
 const bcrypt = require('bcryptjs');
-const mongoose = require('mongoose');
+const { prisma } = require('../config/postgres');
 
-const userSchema = new mongoose.Schema({
-  username: { type: String, required: true },
-  name: { type: String },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ['citizen', 'agent', 'manager', 'admin'], default: 'citizen' },
-  points: { type: Number, default: 0 },
-  address: { type: String },
-  badges: [String],
-  createdAt: { type: Date, default: Date.now }
-});
+function attachCompare(user) {
+  if (!user) return null;
+  user.comparePassword = async function (candidate) {
+    return bcrypt.compare(candidate, user.password);
+  };
+  return user;
+}
 
-// Hash du mot de passe avant sauvegarde
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
-});
-
-// Vérification du mot de passe
-userSchema.methods.comparePassword = async function (candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
-};
-
-
-const User = mongoose.models.User || mongoose.model('User', userSchema);
-module.exports = User; 
+module.exports = {
+  find: async () => {
+    return prisma.user.findMany();
+  },
+  findById: async (id) => {
+    const user = await prisma.user.findUnique({ where: { id } });
+    return attachCompare(user);
+  },
+  findOne: async (query) => {
+    // expecting query like { email }
+    const user = await prisma.user.findUnique({ where: { email: query.email } });
+    return attachCompare(user);
+  },
+  create: async (data) => {
+    if (data.password) {
+      data.password = await bcrypt.hash(data.password, 10);
+    }
+    const user = await prisma.user.create({ data });
+    return attachCompare(user);
+  },
+  findByIdAndUpdate: async (id, update, options) => {
+    if (update.password) {
+      update.password = await bcrypt.hash(update.password, 10);
+    }
+    const updated = await prisma.user.update({ where: { id }, data: update });
+    return attachCompare(updated);
+  },
+  findByIdAndDelete: async (id) => {
+    return prisma.user.delete({ where: { id } });
+  },
+  deleteMany: async () => {
+    return prisma.user.deleteMany();
+  },
+  insertMany: async (users) => {
+    const data = await Promise.all(users.map(async (u) => ({ ...u, password: await bcrypt.hash(u.password, 10) })));
+    return prisma.user.createMany({ data });
+  }
+}; 

@@ -1,12 +1,12 @@
-const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
 
 //const password = await bcrypt.hash("password", 10); 
 
-module.exports = async () => {
-  const password = await bcrypt.hash("password", 10); 
-  await User.deleteMany();
-  await User.insertMany([
+module.exports = async (prisma) => {
+  const password = await bcrypt.hash("password", 10);
+  await prisma.user.deleteMany();
+  await prisma.user.createMany({
+    data: [
     {
         name: "Alice", 
         username: "alice123",
@@ -49,5 +49,6 @@ module.exports = async () => {
         password: password,
         role: "admin"
     }
-]);
+    ]
+  });
 };

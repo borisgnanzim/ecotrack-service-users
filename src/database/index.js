@@ -1,16 +1,17 @@
 require("dotenv").config();
-const mongoose = require("mongoose");
-
+const { prisma } = require("../config/postgres");
 const userSeeder = require("./seeders/userSeeder");
+const notificationSeeder = require("./seeders/notificationSeeder");
 
 async function runSeeders() {
-  await mongoose.connect(process.env.MONGO_URI);
-
+  await prisma.$connect();
   console.log("DB connected");
 
-  await userSeeder();
+  await userSeeder(prisma);
+  await notificationSeeder(prisma);
 
   console.log("Tous les seeders ont été exécutés !");
+  await prisma.$disconnect();
   process.exit();
 }
 
