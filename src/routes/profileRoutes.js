@@ -6,7 +6,7 @@ router.use(authMiddleware);
 
 /**
  * @openapi
- * /profile:
+ * /users/profile:
  *   get:
  *     summary: Retrieve authenticated user's profile
  *     description: Returns the profile information of the currently authenticated user.
@@ -45,7 +45,7 @@ router.get('/', profileController.getProfile);
 
 /**
  * @openapi
- * /profile:
+ * /users/profile:
  *   put:
  *     summary: Update authenticated user's profile
  *     description: Allows the authenticated user to update their profile information.
