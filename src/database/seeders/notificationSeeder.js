@@ -18,7 +18,7 @@ module.exports = async (prisma) => {
         type: 'success'
       },
       {
-        roleTarget: 'manager',
+        userId: alice ? alice.id : null,
         title: 'Maintenance planifiée',
         message: "Une maintenance est prévue ce soir à minuit.",
         type: 'warning'

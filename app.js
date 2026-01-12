@@ -5,6 +5,7 @@ const { swaggerUi, swaggerSpec } = require("./swagger");
 const authMiddleware = require('./src/middleware/authMiddleware');
 const authRoutes = require('./src/routes/authRoutes');
 const profileRoutes = require('./src/routes/profileRoutes');  
+const notificationRoutes = require('./src/routes/notificationRoutes');
 
 const app = express();
 
@@ -25,5 +26,6 @@ app.get('/test', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/users/profile', profileRoutes);
 app.use('/users', userRoutes);
+app.use('/notifications', notificationRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 module.exports = app;

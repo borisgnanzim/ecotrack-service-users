@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
 
 const secret_key = process.env.JWT_SECRET || 'your_secret_key';
+const notificationService = require('../../services/notificationService');
 // login user
 exports.login = async (req, res, next) => {
     try {
@@ -29,6 +30,10 @@ exports.registerCitizen = async (req, res, next) => {
     try {
         const { username, email, password } = req.body;
         const user = await User.create({ username, email, password });
+
+        // send welcome notification asynchronously (best-effort)
+        notificationService.sendWelcomeNotification(user).catch(err => console.error('Welcome notification failed:', err.message || err));
+
         const token = jwt.sign({ id: user.id, role: user.role }, secret_key, { expiresIn: '1h' });
         res.status(201).json({ message: 'Citizen registered successfully', user, token });
     } catch (error) {
